@@ -13,6 +13,7 @@ class Photography(models.Model):
     category = models.CharField(max_length=100, choices=OPTIONS_CATEGORY, default='')
     description = models.TextField(null=True, blank=True)
     photo = models.CharField(max_length=100, null=False, blank=False)
+    isPublic = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Photography [nome={self.name}]'
