@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from users.forms import LoginForms, RegisterForms
 from django.contrib.auth.models import User
-from django.contrib import auth
+from django.contrib import auth, messages
 
 # Create your views here.
 def login(request):
@@ -22,8 +22,10 @@ def login(request):
 
         if user is not None:
             auth.login(request, user)
+            messages.success(request, 'Usuário logado com sucesso!')
             return redirect('home')
         else:
+            messages.error(request, 'Ops... Algo deu errado, tente novamente.')
             return redirect('login')
 
     return render(request, 'users/login.html', {'form':form})
@@ -36,6 +38,7 @@ def register(request):
 
         if form.is_valid():
             if form['password'].value() != form['confirm_password'].value():
+                messages.error(request, 'As senhas não conferem!')
                 return redirect('register')
             
             name=form['name_register'].value()
@@ -43,6 +46,7 @@ def register(request):
             password=form['password'].value()
 
             if User.objects.filter(username=name).exists():
+                messages.error(request, 'Esse nome de usuário já está em uso!')
                 return redirect('register')
                 
             user = User.objects.create_user(
@@ -52,10 +56,13 @@ def register(request):
             )
 
             user.save()
+            messages.success(request, 'Usuário criado com sucesso!')
             return redirect('login')
 
 
     return render(request, 'users/register.html', {'form' : register})
 
 def logout(request):
-    pass
+    auth.logout(request)
+    messages.success(request, 'Logout realizado com sucesso!')
+    return redirect('login')
