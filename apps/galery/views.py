@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from galery.models import Photography
+from apps.galery.models import Photography
 from django.contrib import messages
 
 def index(request):
