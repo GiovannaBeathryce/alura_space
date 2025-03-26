@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from apps.galery.models import Photography
+from apps.galery.forms import PhotographyForms
 from django.contrib import messages
 
 def index(request):
@@ -27,3 +28,25 @@ def search(request):
             photographys = photographys.filter(name__icontains=search_term)
 
     return render(request, 'galery/search.html', {'cards': photographys})
+
+def new_image(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Usuário não logado!')
+        return redirect('login')
+    
+    form = PhotographyForms
+    if request.method == 'POST':
+        form = PhotographyForms(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Imagem adicionada com sucesso!')
+            return redirect('home')
+        
+    return render(request, 'galery/new_image.html', {'form':form})
+
+def update_image(request):
+    pass
+
+def delet_image(request):
+    pass
+
