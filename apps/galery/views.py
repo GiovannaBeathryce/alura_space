@@ -44,9 +44,22 @@ def new_image(request):
         
     return render(request, 'galery/new_image.html', {'form':form})
 
-def update_image(request):
-    pass
+def update_image(request, photo_id):
+    photo = Photography.objects.get(id=photo_id)
+    form = PhotographyForms(instance=photo)
 
-def delet_image(request):
-    pass
+    if request.method == 'POST':
+        form = PhotographyForms(request.POST, request.FILES, instance=photo)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Imagem atualizada com sucesso!')
+            return redirect('home')
+
+    return render(request, 'galery/update_image.html', {'form':form, 'photo_id':photo_id})
+
+def delet_image(request, photo_id):
+    photo = Photography.objects.get(id=photo_id)
+    photo.delete()
+    messages.success(request, 'Imagem deletada com sucesso!')
+    return redirect('home')
 
