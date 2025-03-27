@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.galery.views import index, image, search, new_image, update_image, delet_image
+from apps.galery.views import index, image, search, new_image, update_image, delet_image, filter
 
 urlpatterns = [
     path('', index, name='home'),
@@ -7,5 +7,6 @@ urlpatterns = [
     path('search', search, name='search'),
     path('new-image', new_image, name='new_image'),
     path('update-image/<int:photo_id>', update_image, name='update_image'),
-    path('delet-image/<int:photo_id>', delet_image, name='delet_image')
+    path('delet-image/<int:photo_id>', delet_image, name='delet_image'),
+    path('filter/<str:category>', filter, name='filter')
 ]
